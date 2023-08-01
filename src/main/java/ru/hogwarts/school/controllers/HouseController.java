@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.models.Faculty;
-import ru.hogwarts.school.services.HouseServiceImpl;
+import ru.hogwarts.school.services.HouseService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/faculty")
@@ -18,10 +17,10 @@ import java.util.Map;
 
 public class HouseController {
 
-    private HouseServiceImpl houseService;
+    private final HouseService houseService;
 
     @Autowired
-    public HouseController(HouseServiceImpl houseService) {
+    public HouseController(HouseService houseService) {
         this.houseService = houseService;
     }
 
@@ -43,16 +42,16 @@ public class HouseController {
 
     @GetMapping("/getall")
     @Operation(description = "Получение всех факультетов.")
-    public ResponseEntity<Map<Integer, Faculty>> getAllHouses() {
-        Map<Integer, Faculty> houseMap = houseService.getAllHouses();
-        if (houseMap.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(houseMap);
+    public ResponseEntity<List<Faculty>> getAllHouses() {
+        List<Faculty> houseList = houseService.getAllHouses();
+        if (houseList.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(houseList);
     }
 
     @PutMapping("/edit/{id}")
     @Operation(description = "Редактирование факультетов по номеру.")
     public Faculty putStudent(@RequestBody Faculty house, @PathVariable int id) {
-        Faculty updateHouse = houseService.updateHouse(id, house);
+        Faculty updateHouse = houseService.updateHouse(house);
         return house;
     }
 
@@ -62,7 +61,7 @@ public class HouseController {
             @Parameter(name = "id", example = "1,2,15....")
     })
     public ResponseEntity<String> deleteHouse(@PathVariable int id) {
-        houseService.deleteHouse(id);
+        houseService.deleteHouse(houseService.getHouseByID(id));
         return ResponseEntity.ok("Факультет под номером " + id + " удалён из списка.");
     }
 
@@ -72,7 +71,7 @@ public class HouseController {
             @Parameter(name = "color", example = "red, green")
     })
     public ResponseEntity<List<Faculty>> getAllHousesbyColor(@RequestParam String color) {
-        List<Faculty> faculties = houseService.getSpecificColorHouse(color);
+        List<Faculty> faculties = houseService.findByColor(color);
         return ResponseEntity.ok(faculties);
     }
 }
