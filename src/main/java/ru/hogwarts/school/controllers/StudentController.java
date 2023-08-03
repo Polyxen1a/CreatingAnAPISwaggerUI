@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.StudentService;
+import ru.hogwarts.school.models.StudentDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -37,16 +38,16 @@ public class StudentController {
     @Parameters(value = {
             @Parameter(name = "id", example = "1,2,15....")
     })
-    public ResponseEntity<Student> getStudent(@RequestParam int id) {
-        Student student = studentService.getStudentByID(id);
-        if (student == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(student);
+    public ResponseEntity<StudentDTO> getStudent(@RequestParam int id) {
+        StudentDTO studentDTO = studentService.getStudentByID(id);
+        if (studentDTO == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(studentDTO);
     }
 
     @GetMapping("/getall")
     @Operation(description = "Получение всех студентов.")
-    public ResponseEntity<List<Student>> getAllStudents() {
-        List<Student> studentMap = studentService.getAllStudents();
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
+        List<StudentDTO> studentMap = studentService.getAllStudents();
         if (studentMap.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(studentMap);
     }
@@ -64,7 +65,7 @@ public class StudentController {
             @Parameter(name = "id", example = "1,2,15....")
     })
     public ResponseEntity<String> deleteStudent(@PathVariable int id) {
-        studentService.deleteStudent(studentService.getStudentByID(id));
+        studentService.deleteStudent(studentService.getStudentByID(id).toStudent());
         return ResponseEntity.ok("Студент под номером " + id + " удалён из списка.");
     }
 
@@ -75,6 +76,15 @@ public class StudentController {
     })
     public ResponseEntity<List<Student>> getAllStudentsByAge(@RequestParam int age) {
         List<Student> studentList = studentService.findStudentsByAge(age);
+        return ResponseEntity.ok(studentList);
+    }
+    @GetMapping("/findbyageBetween/{min}-{max}")
+    @Operation(description = "Получение списка студентов по возрастному промежутку.")
+    @Parameters(value = {
+            @Parameter(name = "age", example = "18-25")
+    })
+    public ResponseEntity<List<Student>> getAllStudentsByAgeBetween(@RequestParam int min,int max) {
+        List<Student> studentList = studentService.findByAgeBetween(min,max);
         return ResponseEntity.ok(studentList);
     }
 }

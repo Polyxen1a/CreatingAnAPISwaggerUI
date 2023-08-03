@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.repository.FacultyRepository;
 
+import ru.hogwarts.school.models.FacultyDTO;
+
+import java.util.ArrayList;
 
 import ru.hogwarts.school.models.Faculty;
 
@@ -21,12 +24,19 @@ public class HouseService {
         return facultyRepository.save(newFaculty);
     }
 
-    public Faculty getHouseByID(int id) {
-        return facultyRepository.findById(id).get();
+    public FacultyDTO getHouseByID(int id) {
+        Faculty faculty = facultyRepository.findById(id).orElse(null);
+        return FacultyDTO.fromFaculty(faculty);
     }
 
-    public List<Faculty> getAllHouses() {
-        return facultyRepository.findAll();
+    public List<FacultyDTO> getAllHouses() {
+        List<Faculty> houses = facultyRepository.findAll();
+        List<FacultyDTO> facultyDTOS = new ArrayList<>();
+        for (Faculty f : houses) {
+            FacultyDTO facultyDTO = FacultyDTO.fromFaculty(f);
+            facultyDTOS.add(facultyDTO);
+        }
+        return facultyDTOS;
     }
 
     public Faculty updateHouse(Faculty updatedFaculty) {
@@ -39,5 +49,9 @@ public class HouseService {
 
     public List<Faculty> findByColor(String findColor) {
         return facultyRepository.findByColor(findColor);
+    }
+
+    public List<Faculty> findByName(String name) {
+        return facultyRepository.findByNameIgnoreCase(name);
     }
 }
