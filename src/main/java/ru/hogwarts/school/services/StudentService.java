@@ -1,13 +1,16 @@
 package ru.hogwarts.school.services;
 
+import ru.hogwarts.school.controllers.StudentNotFoundException;
 import ru.hogwarts.school.models.Student;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.models.StudentDTO;
 import java.util.*;
+import org.springframework.data.domain.PageRequest;
+
+
 
 @Service
 public class StudentService {
@@ -19,13 +22,14 @@ public class StudentService {
     public Student addStudent(Student newStudent) {
         return studentRepository.save(newStudent);
     }
-    public StudentDTO getStudentByID(int id) {
-        Student student = studentRepository.findById(id).orElse(null);
+    public StudentDTO getStudentByID(long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found"));
         return StudentDTO.fromStudent(student);
     }
 
-    public List<StudentDTO> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
+    public List<StudentDTO> getAllStudents(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        List<Student> students = studentRepository.findAllStudents(pageRequest);
         List<StudentDTO> studentDTOS = new ArrayList<>();
         for (Student s : students) {
             StudentDTO studentDTO = StudentDTO.fromStudent(s);
@@ -48,5 +52,16 @@ public class StudentService {
 
     public List<Student> findByAgeBetween(int min, int max) {
         return studentRepository.findByAgeBetween(min, max);
+    }
+    public int amountOfStudents() {
+        return studentRepository.getAmountOfStudents();
+    }
+
+    public int getAverageAge() {
+        return studentRepository.getAverageAgeOfStudents();
+    }
+
+    public List<Student> getYoungestStudents() {
+        return studentRepository.getYoungestStudents();
     }
 }
