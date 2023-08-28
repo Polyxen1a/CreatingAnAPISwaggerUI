@@ -23,12 +23,10 @@ import java.nio.file.Path;
 
 public class AvatarController {
     private final AvatarService avatarService;
-    private final StudentService studentService;
 
     @Autowired
     public AvatarController(AvatarService avatarService, StudentService studentService) {
         this.avatarService = avatarService;
-        this.studentService = studentService;
     }
 
     @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -56,6 +54,5 @@ public class AvatarController {
             response.setContentLength((int) avatar.getFileSize());
             is.transferTo(os);
         }
-
     }
 }

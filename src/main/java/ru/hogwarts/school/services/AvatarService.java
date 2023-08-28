@@ -4,16 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.models.Avatar;
-import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.models.StudentDTO;
 import ru.hogwarts.school.repository.AvatarRepository;
-import ru.hogwarts.school.repository.StudentRepository;
 
 import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -24,7 +22,8 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
 
-    public AvatarService(AvatarRepository avatarRepository, StudentService studentService) {
+    public AvatarService(String avatarsDir, AvatarRepository avatarRepository, StudentService studentService) {
+        this.avatarsDir = avatarsDir;
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
     }
@@ -39,7 +38,7 @@ public class AvatarService {
 
     public void uploadAvatar(Long studentID, MultipartFile file) throws IOException {
         StudentDTO student = studentService.getStudentByID(Math.toIntExact(studentID));
-        Path filePath = Path.of(avatarsDir, studentID + "." + getExtension(file.getOriginalFilename()));
+        Path filePath = Path.of(avatarsDir, studentID + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 

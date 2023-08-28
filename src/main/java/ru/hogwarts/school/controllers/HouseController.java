@@ -55,7 +55,6 @@ public class HouseController {
         Faculty updateHouse = houseService.updateHouse(house);
         return house;
     }
-
     @DeleteMapping("/delete/{id}")
     @Operation(description = "Удаление факультета по номеру.")
     @Parameters(value = {
@@ -80,7 +79,7 @@ public class HouseController {
     @Parameters(value = {
             @Parameter(name = "тфьу", example = "slytherin")
     })
-    public ResponseEntity<List<Faculty>> getAllHousesbyName(@RequestParam String name) {
+    public ResponseEntity<List<Faculty>> getAllHousesByName(@RequestParam String name) {
         List<Faculty> faculties = houseService.findByName(name);
         return ResponseEntity.ok(faculties);
     }

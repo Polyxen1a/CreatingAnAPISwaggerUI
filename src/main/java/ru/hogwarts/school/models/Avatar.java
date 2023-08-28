@@ -1,12 +1,14 @@
 package ru.hogwarts.school.models;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Getter
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class Avatar {
     private String mediaType;
     @Lob
     private byte[] data;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "avatar")
     private Student student;
 
     public Avatar(long id, String filePath, long fileSize, String mediaType, byte[] data, Student student) {
@@ -33,48 +35,24 @@ public class Avatar {
         this.student = student;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getFilePath() {
-        return filePath;
     }
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
-    public long getFileSize() {
-        return fileSize;
-    }
-
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
-    }
-
-    public String getMediaType() {
-        return mediaType;
     }
 
     public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
     }
 
-    public byte[] getData() {
-        return data;
-    }
-
     public void setData(byte[] data) {
         this.data = data;
-    }
-
-    public Student getStudent() {
-        return student;
     }
 
     public void setStudent(Student student) {

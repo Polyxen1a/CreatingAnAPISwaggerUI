@@ -1,6 +1,7 @@
 package ru.hogwarts.school.models;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 import java.util.Objects;
 
+@Getter
 @Entity
 @Data
 @NoArgsConstructor
@@ -26,11 +28,16 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    public Student(long id, String name, int age, Faculty faculty) {
+    @OneToOne()
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
+    public Student(long id, String name, int age, Faculty faculty, Avatar avatar) {
+
         this.id = id;
         this.name = name;
         this.age = age;
         this.faculty = faculty;
+        this.avatar = avatar;
     }
 
     @Override
@@ -55,27 +62,19 @@ public class Student {
         return Objects.hash(id, name, age);
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
-    }
-
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 }

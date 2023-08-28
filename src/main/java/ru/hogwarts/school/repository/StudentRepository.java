@@ -1,6 +1,6 @@
 package ru.hogwarts.school.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
 import ru.hogwarts.school.models.Student;
 
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends PagingAndSortingRepository<Student, Long> {
     List<Student> findStudentsByAge(int age);
-    List<Student> findAllStudents(Pageable pageable);
+    Page<Student> findAllStudents(Pageable pageable);
     List<Student> findByAgeBetween(int min, int max);
 
     @Query(value = "select COUNT (*) from students", nativeQuery = true)

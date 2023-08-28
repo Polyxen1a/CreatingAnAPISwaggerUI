@@ -9,6 +9,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.models.StudentDTO;
 import java.util.*;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 
 
 
@@ -28,8 +29,8 @@ public class StudentService {
     }
 
     public List<StudentDTO> getAllStudents(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page,size);
-        List<Student> students = studentRepository.findAllStudents(pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Student> students = studentRepository.findAllStudents(pageRequest);
         List<StudentDTO> studentDTOS = new ArrayList<>();
         for (Student s : students) {
             StudentDTO studentDTO = StudentDTO.fromStudent(s);

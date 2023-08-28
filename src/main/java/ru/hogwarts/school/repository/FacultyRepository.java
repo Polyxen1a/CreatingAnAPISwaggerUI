@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FacultyRepository extends JpaRepository<Faculty, Integer> {
+public abstract class FacultyRepository implements JpaRepository<Faculty, Integer> {
 
-    List<Faculty> findByColor(String findColor);
-    List<Faculty> findByNameIgnoreCase(String name);
+    public abstract List<Faculty> findByColor(String findColor);
+    public abstract List<Faculty> findByNameIgnoreCase(String name);
 }

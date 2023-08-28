@@ -9,6 +9,7 @@ public class StudentDTO {
     private String name;
     private int age;
     private long faculty;
+    private long avatar;
 
     public static StudentDTO fromStudent(Student student) {
         StudentDTO dto = new StudentDTO();
@@ -16,6 +17,7 @@ public class StudentDTO {
         dto.setName(student.getName());
         dto.setAge(student.getAge());
         dto.setFaculty(student.getFaculty().getId());
+        dto.setAvatar(student.getAvatar().getId());
         return dto;
     }
     public Student toStudent(){
@@ -24,6 +26,7 @@ public class StudentDTO {
         student.setName(this.getName());
         student.setAge(this.getAge());
         student.setFaculty(this.toStudent().getFaculty());
+        student.setAvatar(this.toStudent().getAvatar());
         return student;
     }
 }

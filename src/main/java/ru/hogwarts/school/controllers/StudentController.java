@@ -13,7 +13,6 @@ import ru.hogwarts.school.services.StudentService;
 import ru.hogwarts.school.models.StudentDTO;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/student")

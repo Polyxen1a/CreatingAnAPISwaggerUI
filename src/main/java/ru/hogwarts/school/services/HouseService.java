@@ -26,6 +26,7 @@ public class HouseService {
 
     public FacultyDTO getHouseByID(int id) {
         Faculty faculty = facultyRepository.findById(id).orElse(null);
+        assert faculty != null;
         return FacultyDTO.fromFaculty(faculty);
     }
 
