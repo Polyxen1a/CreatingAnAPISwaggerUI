@@ -19,7 +19,7 @@ public interface StudentRepository extends PagingAndSortingRepository<Student, L
     @Query(value = "select COUNT (*) from students", nativeQuery = true)
     int getAmountOfStudents();
     @Query(value = "select AVG(age) from students", nativeQuery = true)
-    int getAverageAgeOfStudents();
-    @Query(value = "select * from students order by age desc limit 5", nativeQuery = true)
+    double getAverageAgeOfStudents();
+    @Query(value = "select * from students order by age asc limit 5", nativeQuery = true)
     List<Student> getYoungestStudents();
 }
