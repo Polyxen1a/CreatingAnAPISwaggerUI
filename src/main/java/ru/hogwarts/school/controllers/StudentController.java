@@ -50,9 +50,6 @@ public class StudentController {
     @GetMapping("/getAll")
     @Operation(description = "Получение списка студентов от - до.")
     public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam("page") Integer pageNum, @RequestParam("size") Integer pageSize) {
-        if (pageSize > 50 || pageSize <= 0) {
-            pageSize = 50;
-        }
         List<StudentDTO> studentMap = studentService.getAllStudents(pageNum, pageSize);
         if (studentMap.isEmpty()) {
             return ResponseEntity.noContent().build();
