@@ -13,6 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @Transactional
 
@@ -22,6 +25,8 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     public AvatarService(String avatarsDir, AvatarRepository avatarRepository, StudentService studentService) {
         this.avatarsDir = avatarsDir;
         this.avatarRepository = avatarRepository;
@@ -29,6 +34,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(Long avatarID) {
+        logger.debug("Запрос аватара по ID {}",avatarID);
         return avatarRepository.findById(avatarID).orElse(null);
     }
 
@@ -37,6 +43,7 @@ public class AvatarService {
     }
 
     public void uploadAvatar(Long studentID, MultipartFile file) throws IOException {
+        logger.info("Загрузка аватара");
         StudentDTO student = studentService.getStudentByID(Math.toIntExact(studentID));
         Path filePath = Path.of(avatarsDir, studentID + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
@@ -47,7 +54,9 @@ public class AvatarService {
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
             bis.transferTo(bos);
-        }
+    } catch (IOException e){
+        logger.error("Ошибка загрузки аватара: ", e);
+    }
 
         Avatar avatar = findAvatar(studentID);
         avatar.setStudent(student.toStudent());
