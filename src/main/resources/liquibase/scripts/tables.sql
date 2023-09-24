@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+
+-- changeset polyxenia:2
+
 CREATE TABLE faculties
 (
     id         SERIAL,

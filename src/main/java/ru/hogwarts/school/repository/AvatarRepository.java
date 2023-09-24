@@ -5,6 +5,6 @@ import ru.hogwarts.school.models.Avatar;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AvatarRepository extends JpaRepository<Avatar,Long> {
+public interface AvatarRepository extends JpaRepository<Avatar, Long> {
 
 }
