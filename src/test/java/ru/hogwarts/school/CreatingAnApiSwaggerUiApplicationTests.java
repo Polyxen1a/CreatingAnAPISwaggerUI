@@ -9,5 +9,4 @@ class CreatingAnApiSwaggerUiApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
